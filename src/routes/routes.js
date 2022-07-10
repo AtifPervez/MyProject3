@@ -2,9 +2,7 @@ const express=require("express")
 const router=express.Router()
 const {createbook,getBooks,getBooksById,updatedetails,deletebook}=require("../controller/bookController")
 const {createUser,loginAuthor}=require("../controller/userController")
-const {addReview}=require("../controller/reviewController")
-const {updateReview}=require("../controller/reviewController")
-const {deleteReview}=require("../controller/reviewController")
+const {addReview,updateReview,deleteReview}=require("../controller/reviewController")
 const {authentication,authorisation}=require("../middleware/auth")
 
 // ========================================User================================================
