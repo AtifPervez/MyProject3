@@ -13,9 +13,11 @@ const isvalidString=function(x){
     if(typeof x==="string" && x.trim().length===0) return false
     return true  
 }
-const isvalidbody=function(x){
+
+const isValidbody=function(x){
     return Object.keys(x).length>0
 }
+
 // Regex(s) used for the validation of different keys
 
 let nameRegex = /^[.a-zA-Z\s]+$/
@@ -23,8 +25,5 @@ let emailRegex = /^[a-z]{1}[a-z0-9._]{1,100}[@]{1}[a-z]{2,15}[.]{1}[a-z]{2,10}$/
 let phoneRegex = /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/
 let passRegex = /^[a-zA-Z0-9!@#$%^&*]{8,15}$/
 
-const isValidbody=function(x){
-    return Object.keys(x).length>0
-}
 
-module.exports = { isValid, isValidTitle,  nameRegex, emailRegex, phoneRegex, passRegex,isValidbody }  // --> exporting the variables defined in the module
+module.exports = { isValid, isValidTitle,isvalidString,  nameRegex, emailRegex, phoneRegex, passRegex,isValidbody }  // --> exporting the variables defined in the module

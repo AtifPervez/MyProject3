@@ -1,28 +1,46 @@
 const express=require("express")
 const router=express.Router()
 const {createbook,getBooks,getBooksById,updatedetails,deletebook}=require("../controller/bookController")
-const {createUser}=require("../controller/userController")
+const {createUser,loginAuthor}=require("../controller/userController")
 const {addReview}=require("../controller/reviewController")
-
+const {updateReview}=require("../controller/reviewController")
+const {deleteReview}=require("../controller/reviewController")
+const {authentication,authorisation}=require("../middleware/auth")
 
 // ========================================User================================================
 router.post("/user",createUser)
-
+router.post("/login",loginAuthor)
 // ========================================Book================================================
 
-router.post("/books",createbook)
-router.get("/books",getBooks)
-router.get("/books/:bookId",getBooksById)
-router.put("/books/:bookId",updatedetails)
-router.delete("/books/:bookId",deletebook)
+router.post("/books",authentication,authorisation,createbook)
+router.get("/books",authentication,getBooks)
+router.get("/books/:bookId",authentication,authorisation,getBooksById)
+router.put("/books/:bookId",authentication,authorisation,updatedetails)
+router.delete("/books/:bookId",authentication,authorisation,deletebook)
 
 
 // ========================================Review================================================
 
 router.post("/books/:bookId/review",addReview)
-router.put('/books/:bookId/review/:reviewId', reviewController.updateReview)
+router.put('/books/:bookId/review/:reviewId', updateReview)
+router.delete('/books/:bookId/review/:reviewId', deleteReview)
 
+//url checking 
 
+router.post("*", (req,res) =>{
+
+    return res.status(404).send({ message:"Page Not Found"})
+})
+router.get("*", (req,res) =>{
+    return res.status(404).send({ message:"Page Not Found"})
+})
+router.put("*", (req,res) =>{
+    return res.status(404).send({ message:"Page Not Found"})
+})
+
+router.delete("*", (req,res) =>{
+    return res.status(404).send({ message:"Page Not Found"})
+})
 
 
 

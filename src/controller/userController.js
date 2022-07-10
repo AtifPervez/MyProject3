@@ -2,6 +2,7 @@ const userModel = require("../models/userModel")
 const { isValid, isValidTitle,isValidbody, nameRegex, emailRegex, phoneRegex, passRegex } = require("../validator/validator")
 
 const pinValidator = require('pincode-validator')
+const jwt=require("jsonwebtoken")
 
 
 const createUser = async function (req, res) {
@@ -69,27 +70,40 @@ const createUser = async function (req, res) {
 }
 
 
+const loginAuthor=async function(req,res){
+    try{
+    let data=req.body
+    if (!isValidbody(data)) {
+        return res.status(400).send({ status: false, message: "data not found,plz enter req details" })
+    }
+      let{email,password}=data 
+      if (!isValid(email)) {
+        return res.status(400).send({ status: false, message: "plz enter email" })
+    }
+    if (!isValid(password)) {
+        return res.status(400).send({ status: false, message: "plz enter password" })
+    }
 
+    //email and password validation
+    if (!/^\w+([\.-]?\w+)@\w+([\. -]?\w+)(\.\w{2,3})+$/.test(email)) {
+        return res.status(400).send({ status: false, message: "plz enter email in right format" })
+    }
+    if (!/^[a-zA-Z0-9!@#$%^&*]{8,15}$/.test(password)) {
+        return res.status(400).send({ status: false, message: "plz enter valid password with atleast one uppercase and one lowercase and one charecter and one number" })
+    }
+      const getuserdata=await userModel.findOne({email,password})
+      if(!getuserdata){
+        return res.status(404).send({ status: false, message: "no data found with this email and password" })
+}
+      const token=jwt.sign({
+        userId:getuserdata._id
+      },"This-is-a-secret-key",{expiresIn:"12h"}) 
+      res.status(200).send({status:true,message:"login successful",token})
 
+    }catch(err){
+        res.status(500).send({ status: false, message: err.message })
 
+    }
+}
 
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-module.exports = { createUser }
+module.exports = { createUser,loginAuthor}
