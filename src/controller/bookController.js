@@ -5,6 +5,36 @@ const userModel = require("../models/userModel")
 const reviewModel = require("../models/reviewModel")
 const moment = require('moment')
 const {checkISBN,titleRegex}=require("../validator/validator")
+const aws= require("aws-sdk")
+
+
+
+aws.config.update({
+    accessKeyId: "AKIAY3L35MCRVFM24Q7U",
+    secretAccessKey: "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",
+    region: "ap-south-1"
+})
+
+let uploadFile= async ( file) =>{
+   return new Promise( function(resolve, reject) {
+    let s3= new aws.S3({apiVersion: '2006-03-01'}); 
+
+    var uploadParams= {
+        ACL: "public-read",
+        Bucket: "classroom-training-bucket",  
+        Key: "abc/" + file.originalname,  
+        Body: file.buffer
+    }
+
+    s3.upload( uploadParams, function (err, data ){
+        if(err) {
+            return reject({"error": err})
+        }
+        return resolve(data.Location)
+    })
+})
+}
+
 
 
 // ============================================createBook===================================================
@@ -80,7 +110,17 @@ const createbook = async function (req, res) {
                     message: "Enter a valid date with the format (YYYY-MM-DD).",
                 });}
         } else releasedAt = new Date()
+// ==========================================Profile Image===============================================================
+        let files=req.files
 
+        if (!(files&&files.length)) {
+            return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });}
+
+        const uploadedBookImage = await uploadFile(files[0])
+
+        data.bookImage=uploadedBookImage
+// ==============================================================================================================================
+        
         let obj = { title, excerpt, userId, ISBN, category, subcategory, releasedAt }
 
 
@@ -125,9 +165,9 @@ const getBooks = async function (req, res) {
             obj.subcategory = { $all: a }
         }
 
-        const books = await bookModel.find({ ...obj, isDeleted: false }).select({ createdAt: 0, updatedAt: 0, __v: 0, subcategory: 0, isDeleated: 0 })
+        const books = await bookModel.find({ ...obj, isDeleted: false }).select({ createdAt: 0, updatedAt: 0, __v: 0, subcategory: 0, isDeleated: 0,ISBN:0}).sort({title:1})
         if (!books.length) {
-            return res.status(408).send({ status: false, message: "there is no book found" })
+            return res.status(404).send({ status: false, message: "there is no book found" })
 
         }
         return res.status(200).send({ status: true,message: 'Books list', data: books })
@@ -255,7 +295,7 @@ const deletebook = async function (req, res) {
         if (!deletedbook) {
             return res.status(404).send({ status: false, message: "no book found" })
         }
-        return res.status(200).send({ status: true, data: deletedbook })
+        return res.status(200).send({ status: true,message: "Success" })
 
     } catch (err) {
         return res.status(500).send({ status: false, message: err.message })

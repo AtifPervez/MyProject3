@@ -140,12 +140,12 @@ const deleteReview=async function(req,res){
             return res.status(400).send({status:false,message:"Please Enter The Valid bookId "})
        }
        let bookDetail=await bookModel.findOne({_id:bookId,isDeleted:false})
-       if(!bookDetail) return res.status(400).send({status:false,message:"Sorry:Book not found 😢"})
+       if(!bookDetail) return res.status(404).send({status:false,message:"Sorry:Book not found 😢"})
         
         if(!mongoose.isValidObjectId(reviewId)){
             return res.status(400).send({status:false,message:"Please Enter The Valid ReviewId "})}
         let reviewCheck=await reviewModel.findOne({_id:reviewId,isDeleted:false})
-        if(!reviewCheck) return res.status(400).send({status:false,message:"Sorry:Review not Found 😢"})
+        if(!reviewCheck) return res.status(404).send({status:false,message:"Sorry:Review not Found 😢"})
 
         let deletedReview=await reviewModel.findOneAndUpdate({_id:reviewId,isDeleted:false,bookId:bookId},{isDeleted:true,deletedAt:new Date()})
         if(!deletedReview){
