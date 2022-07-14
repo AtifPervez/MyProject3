@@ -6,7 +6,7 @@ const reviewModel = require("../models/reviewModel")
 const moment = require('moment')
 const {checkISBN,titleRegex}=require("../validator/validator")
 const aws= require("aws-sdk")
-const { is } = require('express/lib/request');
+
 
 
 aws.config.update({
@@ -35,6 +35,27 @@ let uploadFile= async ( file) =>{
 })
 }
 
+
+
+//AWS configaration
+
+const bookcover=async (req,res)=>{
+    try{
+        let files=req.files
+
+        if (!(files&&files.length)) {
+            return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });}
+
+        const uploadedBookImage = await uploadFile(files[0])
+
+        //data.bookImage=uploadedBookImage
+        return res.status(201).send({ status: true, data: uploadedBookImage})
+
+    }catch(err){
+        return res.status(500).send({ status: false, message:err.message })
+
+    }
+}
 
 
 // ============================================createBook===================================================
@@ -110,16 +131,6 @@ const createbook = async function (req, res) {
                     message: "Enter a valid date with the format (YYYY-MM-DD).",
                 });}
         } else releasedAt = new Date()
-// ==========================================Profile Image===============================================================
-        let files=req.files
-
-        if (!(files&&files.length)) {
-            return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });}
-
-        const uploadedBookImage = await uploadFile(files[0])
-
-        data.bookImage=uploadedBookImage
-// ==============================================================================================================================
         
         let obj = { title, excerpt, userId, ISBN, category, subcategory, releasedAt }
 
@@ -254,7 +265,7 @@ const updatedetails = async function (req, res) {
         }
         if (isValid(releasedAt)) {
                 if (!moment(releasedAt, "YYYY-MM-DD", true).isValid())
-                    return res.status(400).send({status: false,message: "Enter a valid date with the format (YYYY-MM-DD)."});
+                    return res.status(400).send({status: false,message: "Enter a valid date with the format (YYYY-MM-DD)."});
             obj.releasedAt = releasedAt.trim()    
         }
         if (isValid(ISBN)) {
@@ -305,4 +316,4 @@ const deletebook = async function (req, res) {
 
 
 
-module.exports = { createbook, getBooks, getBooksById, updatedetails, deletebook }
+module.exports = { createbook, getBooks, getBooksById, updatedetails, deletebook,bookcover }

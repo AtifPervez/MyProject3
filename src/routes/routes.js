@@ -1,9 +1,10 @@
 const express=require("express")
 const router=express.Router()
-const {createbook,getBooks,getBooksById,updatedetails,deletebook}=require("../controller/bookController")
+const {createbook,getBooks,getBooksById,updatedetails,deletebook,bookcover}=require("../controller/bookController")
 const {createUser,loginAuthor}=require("../controller/userController")
 const {addReview,updateReview,deleteReview}=require("../controller/reviewController")
 const {authentication,authorisation}=require("../middleware/auth")
+
 
 // ========================================User================================================
 router.post("/register",createUser)
@@ -23,6 +24,9 @@ router.delete("/books/:bookId",authentication,authorisation,deletebook)
 router.post("/books/:bookId/review",addReview)
 router.put('/books/:bookId/review/:reviewId', updateReview)
 router.delete('/books/:bookId/review/:reviewId', deleteReview)
+router.post('/aws',bookcover)
+
+
 
 //url checking 
 
