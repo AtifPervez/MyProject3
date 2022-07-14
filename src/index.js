@@ -2,7 +2,7 @@ const express=require('express')
 const app=express()
 
 const bodyparser=require('body-parser')
-const router = require('./routes/route')
+const router = require('./routes/routes')
  app.use(bodyparser.json())
 
  const multer=require('multer');
