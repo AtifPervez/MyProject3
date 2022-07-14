@@ -11,14 +11,14 @@ const {checkISBN,titleRegex}=require("../validator/validator")
 const createbook = async function (req, res) {
     try {
         let data = req.body
-        let { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = data
+        let { title, excerpt, userId, ISBN, category, subcategory,releasedAt } = data
         if (!isValidbody(data)) {
             return res.status(400).send({ status: false, message: "body can't be empty" })
         }
         if (!isValid(title)) {
             return res.status(400).send({ status: false, message: "plz enter title" })
         }
-        if(!titleRegex.test(title))return res.status(400).send({ status: false, message: "plz enter valid title format" })
+        
         const titleCheck = await bookModel.findOne({ title })
         if (titleCheck) return res.status(400).send({ status: false, message: "title alraedy exist" })
 

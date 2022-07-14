@@ -13,7 +13,8 @@ const createUser = async function (req, res) {
         let { title, name, phone, email, password } = data
         let filter={ title, name, phone, email, password }
 
-        if ( !isValid(title) || !isValidTitle(title.trim()) )  // --> title should be provided in the body
+    
+        if (!isValidTitle(title.trim()) )  // --> title should be provided in the body
             return res.status(400).send({ status: false, message: "Please enter the title ('Mr', 'Miss', 'Mrs'). ⚠️" })
 
         if (!isValid(name))  // --> name should be provided in the body
@@ -63,12 +64,11 @@ const createUser = async function (req, res) {
 
             if (!isValid(data.address.pincode))return res.status(400).send({ status: false, message: "Enter the pincode" })
            
-            // let pinValidated = pinValidator.validate(data.address.pincode)
+      
             let pinValidated = pinRegex.test(data.address.pincode)
             if (!pinValidated) return res.status(400).send({ status: false, message: "Please enter a valid pincode." })
 
-            // let cityValidated = nameRegex.test(data.address.city)
-            // if (!cityValidated) return res.status(400).send({ status: false, message: "Please enter a valid city name." })
+           
             filter.address=data.address
         }
         
