@@ -10,7 +10,7 @@ const {authentication,authorisation}=require("../middleware/auth")
 router.post("/register",createUser)
 router.post("/login",loginAuthor)
 // ========================================Book================================================
-
+router.post('/aws',bookcover)
 router.post("/books",authentication,authorisation,createbook)
 router.get("/books",authentication,getBooks)
 router.get("/books/:bookId",authentication,getBooksById)
@@ -24,7 +24,7 @@ router.delete("/books/:bookId",authentication,authorisation,deletebook)
 router.post("/books/:bookId/review",addReview)
 router.put('/books/:bookId/review/:reviewId', updateReview)
 router.delete('/books/:bookId/review/:reviewId', deleteReview)
-router.post('/aws',bookcover)
+
 
 
 
