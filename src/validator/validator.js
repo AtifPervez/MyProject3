@@ -20,7 +20,7 @@ const isValidbody=function(x){
 
 // Regex(s) used for the validation of different keys
 
-// let nameRegex = /^[a-zA-Z\s]+$/
+
 let nameRegex = /^(?:([A-Za-z]+\ \1)|([A-Za-z]))+$/
 let emailRegex = /^[a-z]{1}[a-z0-9._]{1,100}[@]{1}[a-z]{2,15}[.]{1}[a-z]{2,10}$/
 let phoneRegex = /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/
@@ -29,10 +29,7 @@ let pinRegex = /^(\d{4}|\d{5}|\d{6})$/
 let streetRegex = /^(?:([A-Za-z0-9]+\-\1+[A-Za-z0-9/])|([A-Za-z0-9])|([A-Za-z]+\ \1+[A-Za-z0-9])|([([A-Za-z0-9]+\,\1+[A-Za-z0-9\s]))+$/
 let titleRegex = /^(?:([A-Za-z0-9]+\-\1+[A-Za-z0-9/])|([A-Za-z])|([A-Za-z]+\ \1+[A-Za-z0-9])|([([A-Za-z0-9]+\,\1+[A-Za-z0-9\s]))+$/
 let checkISBN= /^(?=(?:\D*\d){13}(?:(?:\D*\d){3})?$)[\d-]+$/
-//let reviewRegex = /^(?:([A-Za-z0-9]+\-\1+[A-Za-z0-9/])|([A-Za-z0-9])|([A-Za-z]+\ \1+[A-Za-z0-9])|([([A-Za-z0-9]+\,\1+[A-Za-z0-9\s])|([([A-Za-z0-9]+\.\1+[A-Za-z0-9\s]))+$/
 
-
-// let nameRegex = /^[.a-zA-Z\s,-]+$/
 
 
 module.exports = { isValid, isValidTitle,isvalidString,  nameRegex, emailRegex, phoneRegex, passRegex,isValidbody,pinRegex,streetRegex,checkISBN,titleRegex}  // --> exporting the variables defined in the module
